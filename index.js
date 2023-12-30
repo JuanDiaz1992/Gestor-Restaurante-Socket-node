@@ -1,16 +1,40 @@
+// const http = require("http");
+// const server = http.createServer();
+// const { Socket } = require("socket.io");
+
+// const PORT = 4000
+// const io = require('socket.io')(server,{
+//     cors:{ origin: '*'}
+// })
+// io.on('connection', (socket) =>{
+//     console.log("Conexión establecida")
+//     socket.on('change_state',(data)=>{
+//         io.emit('change_state',data);
+//     })
+// })
+
+// server.listen(PORT);
+
 const http = require("http");
 const server = http.createServer();
-const { Socket } = require("socket.io");
+const { Server: IoServer } = require("socket.io");  // Renombré Socket a IoServer para claridad
 
-const PORT = 4000
-const io = require('socket.io')(server,{
-    cors:{ origin: '*'}
-})
-io.on('connection', (socket) =>{
-    console.log("Conexión establecida")
-    socket.on('change_state',(data)=>{
-        io.emit('change_state',data);
-    })
-})
+const PORT = 4000;
 
-server.listen(PORT);
+// Asegúrate de escuchar en IPv4 (0.0.0.0) para permitir conexiones desde cualquier dirección IPv4.
+const io = new IoServer(server, {
+    cors: { origin: '*' },
+    transports: ['polling', 'websocket']
+});
+
+io.on('connection', (socket) => {
+    console.log("Conexión establecida");
+    socket.on('change_state', (data) => {
+        io.emit('change_state', data);
+    });
+});
+
+// Escucha en todas las direcciones IPv4 en el puerto especificado.
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor escuchando en el puerto ${PORT}`);
+});
