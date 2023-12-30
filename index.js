@@ -29,6 +29,7 @@ const io = new IoServer(server, {
 
 io.on('connection', (socket) => {
     console.log("Conexión establecida");
+
     socket.on('change_state', (data) => {
         io.emit('change_state', data);
     });
