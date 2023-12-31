@@ -2,7 +2,7 @@ const http = require("http");
 const server = http.createServer();
 const { Server: IoServer } = require("socket.io");  // Renombré Socket a IoServer para claridad
 
-const PORT = 80;
+const PORT = 4000;
 
 // Asegúrate de escuchar en IPv4 (0.0.0.0) para permitir conexiones desde cualquier dirección IPv4.
 const io = new IoServer(server, {
